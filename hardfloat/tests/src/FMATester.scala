@@ -1,15 +1,13 @@
 package hardfloat.test
 
 import chisel3.RawModule
-import org.scalatest.ParallelTestExecution
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import scala.collection.parallel.CollectionConverters._
 
-trait FMATester extends AnyFlatSpec with Matchers with ParallelTestExecution {
+trait FMATester extends AnyFlatSpec with Matchers {
   def exp(f: Int) = f match {
     case 16 => 5
     case 32 => 8
@@ -90,8 +88,8 @@ trait FMATester extends AnyFlatSpec with Matchers with ParallelTestExecution {
 
     (if (dutArgs.isDefined) {
       require(softfloatArgs.size == dutArgs.get.size, "size of softfloatArgs and dutArgs should be same.")
-      (softfloatArgs zip dutArgs.get).par.map { case (s, d) => executeAndLog(s, d) }
-    } else softfloatArgs.par.map { s => executeAndLog(s, Seq.empty) }).seq
+      (softfloatArgs zip dutArgs.get).map { case (s, d) => executeAndLog(s, d) }
+    } else softfloatArgs.map { s => executeAndLog(s, Seq.empty) })
   }
 }
 
